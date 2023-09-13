@@ -27,6 +27,10 @@
 
 ## Installation
 
+In this repo, just run `docker-compose up -d` and check web server in localhost:8080/
+
+You can create user in web server with `airflow users create`
+
 ### Airflow Locally
 
 1. Install airflow: https://github.com/apache/airflow
@@ -36,9 +40,9 @@ pip install 'apache-airflow==2.7.1' \
  --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.7.1/constraints-3.8.txt"
 ```
 
-2. export AIRFLOW_HOME=.
+2. `export AIRFLOW_HOME=.`
 3. `airflow db init`
-4. `airflow webserver -p 8080` and check web server in 0.0.0.0:8080/
+4. `airflow webserver -p 8080` and check web server in localhost:8080/
 5. Set username and password w. `airflow users create --help`
 6. `airflow scheduler`
 
@@ -52,7 +56,7 @@ curl -Lf0 'https://airflow.apache.org/docs/apache-airflow/2.0.1/docker-compose.y
 
 2. `mkdir ./dags ./logs ./plugins`
 3. `docker-compose up airflow-init`
-4. `docker-compose up -d` and check web server in 0.0.0.0:8080/
+4. `docker-compose up -d` and check web server in localhost:8080/
 
 ## Quick Start
 
@@ -64,7 +68,7 @@ curl -Lf0 'https://airflow.apache.org/docs/apache-airflow/2.0.1/docker-compose.y
 ```python
 from datetime import datetime
 from airflow import DAG
-from airflow.operators import BashOperator
+from airflow.operators.bash import BashOperator
 
 default_args = {
   'owner': 'yuhodots',
@@ -80,17 +84,17 @@ with DAG(
   schedule_interval='@daily'
 ) as dag:
   
-task1 = BashOperator(
-	task_id='first_task',
-  bash_command="echo hello world, this is the first task!"
-)
+  task1 = BashOperator(
+  	task_id='first_task',
+    bash_command="echo hello world, this is the first task!"
+  )
 
-task2 = BashOperator(
-	task_id='second_task',
-  bash_command="echo hello world, this is the second task!"
-)
+  task2 = BashOperator(
+  	task_id='second_task',
+    bash_command="echo hello world, this is the second task!"
+  )
 
-task1 >> task2	# same with `task1.set_downstream(task2)`
+  task1 >> task2	# same with `task1.set_downstream(task2)`
 ```
 
 ### PythonOperator
@@ -117,11 +121,11 @@ with DAG(
   schedule_interval='@daily'
 ) as dag:
   
-task1 = PythonOperator(
-	task_id='first_task',
-  python_callable=greet,
-  op_kwargs={'name': 'Yuho Jeong', 'age': 27}
-)
+  task1 = PythonOperator(
+  	task_id='first_task',
+    python_callable=greet,
+    op_kwargs={'name': 'Yuho Jeong', 'age': 27}
+  )
 
-task1
+  task1
 ```
