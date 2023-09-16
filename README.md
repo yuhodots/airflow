@@ -129,3 +129,13 @@ with DAG(
 
   task1
 ```
+
+## Debugging
+
+You can debug your DAG by simply adding this code line!
+
+```python
+if __name__ == "__main__":
+    dag.test()
+```
+
