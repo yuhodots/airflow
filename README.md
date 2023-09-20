@@ -5,9 +5,16 @@
 - DAG: A collection of tasks
 - Task: Task implements operators
 - Operator: BashOperator, PythonOperator, etc.
+- Sensor: 외부 이벤트에 대해 특정 조건 만족하는지 주기적으로 확인
 - Task Lifecycle: `no_status` -> Scheduler -> `{status}` -> Executor -> `{status}` -> Worker -> `{status}`
   - status: no_status, scheduled, upstream_failed, queued, running, success, failed, up_for_retry, up_for_rescehdule, skipped, etc.
   
+- Others.
+  - start_date: 시작되는 기준 시점. 즉, 실제 실행은 `start_date + 주기` 부터 시작
+  - execution_date: 실제 실행 날짜가 아닌 예약을 시도한 시간 (historical name for what is called a *logical date*)
+  - catchup: current date과 start date에 차이가 있어 과거 데이터에 대해서도 DAG가 실행 되어야하는 경우 활용. False로 지정시에는 최근 DAG만 실행
+  - backfill: 스케줄 시점이 지나간 DAG 실행할 때 활용
+
 
 ### Fundamental Features
 
@@ -61,7 +68,16 @@ curl -Lf0 'https://airflow.apache.org/docs/apache-airflow/2.0.1/docker-compose.y
 ## Quick Start
 
 - Wonderful example codes are [here](https://github.com/coder2j/airflow-docker/tree/main/dags) and [here](https://www.youtube.com/watch?v=K9AnJ9_ZAXE&t=37s)
+- Google Gloud DAG documents are [here](https://cloud.google.com/composer/docs/how-to/using/writing-dags?hl=ko)
 - You can check the results of tasks in the Log of the Airflow webserver (0.0.0.0:8080/)
+
+### Example DAGs
+
+You can see example DAGs by turning on the `AIRFLOW__CORE__LOAD_EXAMPLES` flag in `docker-compose.yaml`
+
+```
+AIRFLOW__CORE__LOAD_EXAMPLES: 'true'
+```
 
 ### BashOperator
 
